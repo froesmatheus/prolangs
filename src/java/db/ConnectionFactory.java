@@ -14,15 +14,16 @@ import java.sql.SQLException;
  * @author mathe
  */
 public class ConnectionFactory {
+
     private Connection con;
-       
+
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         if (con == null) {
-           Class.forName("com.mysql.jdbc.Driver");
-           con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/prolangs",
-            "root", "root"); 
-        } 
-        
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/prolangs",
+                    "root", "root");
+        }
+
         return con;
     }
 }
