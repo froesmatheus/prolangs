@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>LinguagemController</servlet-name>
+        <servlet-class>controllers.LinguagemController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FrameworkController</servlet-name>
+        <servlet-class>controllers.FrameworkController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controllers.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LinguagemController</servlet-name>
+        <url-pattern>/LinguagemController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrameworkController</servlet-name>
+        <url-pattern>/FrameworkController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/LoginController</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>linguagens.jsp</welcome-file>
+    </welcome-file-list>
+    <context-param>
+        <description>Local para fazer upload de arquivos</description>
+        <param-name>file-upload</param-name>
+        <param-value>
+            /home/matheus/Documents/NetBeansProjects/Prolangs/web/images/
+        </param-value>
+    </context-param>
+</web-app>
