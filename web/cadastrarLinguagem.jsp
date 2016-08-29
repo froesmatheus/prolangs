@@ -3,7 +3,6 @@
     Created on : Aug 26, 2016, 7:01:00 PM
     Author     : mathe
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
 <!DOCTYPE html>
