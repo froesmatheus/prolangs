@@ -14,13 +14,9 @@ import java.sql.SQLException;
  * @author mathe
  */
 public class ConnectionFactory {
-    private static Connection con;
-    
-    private ConnectionFactory() {
-        
-    }
-    
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    private Connection con;
+       
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
         if (con == null) {
            Class.forName("com.mysql.jdbc.Driver");
            con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/prolangs",

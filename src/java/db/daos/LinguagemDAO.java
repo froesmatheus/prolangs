@@ -24,7 +24,7 @@ public class LinguagemDAO {
     private final Connection con;
     
     public LinguagemDAO() throws SQLException, ClassNotFoundException {
-        con = ConnectionFactory.getConnection();
+        con = new ConnectionFactory().getConnection();
     }
     
     public boolean insert(Linguagem linguagem) {
