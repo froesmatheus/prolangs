@@ -5,6 +5,7 @@
 <%@page import="db.daos.LinguagemDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
+<%@include file="autenticar.jspf" %>
 <!DOCTYPE html>
 <%
     LinguagemDAO linguagemDAO = new LinguagemDAO();
@@ -39,6 +40,8 @@
 
         <form method="post" action="FrameworkController" enctype="multipart/form-data">
             <div class="list-group">
+                <input type="hidden" name="id" value="<%=framework.getId()%>"/>
+
                 <div class="list-group-item">
                     <h4 class="list-group-item-heading">Nome</h4>
                     <input name="nome" value="<%=framework.getNome()%>" class="form-control" required/>
@@ -77,7 +80,7 @@
 
                 <div class="list-group-item">
                     <h4 class="list-group-item-heading">Logo</h4>
-                    <input type="file" accept="image/*" name="logo" required/>
+                    <input type="file" accept="image/*" name="logo"/>
                 </div>
 
                 <div class="list-group-item">

@@ -22,7 +22,7 @@
                 <div class="list-group">
                     <div class="list-group-item">
                         <h4 class="list-group-item-heading">Login</h4>
-                        <input name="login" class="form-control" required/>
+                        <input name="login" class="form-control" required autofocus/>
                     </div>
 
                     <div class="list-group-item">

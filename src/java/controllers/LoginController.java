@@ -5,12 +5,15 @@
  */
 package controllers;
 
+import db.daos.UsuarioDAO;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Usuario;
 
 /**
  *
@@ -20,6 +23,11 @@ public class LoginController extends HttpServlet {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private UsuarioDAO dao;
+
+    public LoginController() throws SQLException, ClassNotFoundException {
+        this.dao = new UsuarioDAO();
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,18 +46,16 @@ public class LoginController extends HttpServlet {
     }
 
     private void autenticarUsuario() throws IOException {
-        String login = "admin";
-        String senha = "1234";
-
         String loginForm = request.getParameter("login");
         String senhaForm = request.getParameter("password");
 
-        if (loginForm.equals(login) && senhaForm.equals(senha)) {
-            request.getSession().setAttribute("login", login);
-            request.getSession().setAttribute("password", senha);
+        Usuario usuario = dao.select(loginForm, senhaForm);
+        if (usuario != null) {
+            request.getSession().setAttribute("login", usuario.getLogin());
+            request.getSession().setAttribute("password", usuario.getSenha());
             response.sendRedirect("linguagens.jsp");
         } else {
-            response.getWriter().print("<script>window.alert('Usuário não autorizado'); window.location.href='linguagens.jsp';</script>");
+            response.getWriter().print("<script>window.alert('Usuário não autorizado'); window.location.href='login.jsp';</script>");
         }
     }
 

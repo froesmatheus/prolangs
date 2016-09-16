@@ -8,7 +8,6 @@ package controllers;
 import db.daos.LinguagemDAO;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +43,7 @@ public class LinguagemController extends HttpServlet {
         this.response = response;
 
         if (request.getParameter("btn_editar") != null) {
-            editarLinguagem();
+            getEditarLinguagemView();
             return;
         }
 
@@ -54,24 +53,28 @@ public class LinguagemController extends HttpServlet {
         }
 
         if (request.getContentType().contains("multipart/form-data")) {
-            adicionarLinguagem();
+            adicionarOuEditarLinguagem();
         }
     }
 
-    private void editarLinguagem() throws IOException {
+    private void getEditarLinguagemView() throws IOException {
         String nome = request.getParameter("btn_editar");
         response.sendRedirect("editarLinguagem.jsp?nome=" + nome);
     }
 
     private void excluirLinguagem() throws IOException {
         int linguagemId = Integer.parseInt(request.getParameter("btn_excluir"));
+        Linguagem linguagem = dao.select(linguagemId);
         dao.delete(linguagemId);
+        String filePath = getServletContext().getInitParameter("file-upload");
+        File file = new File(filePath + linguagem.getCaminhoLogo());
+        file.delete();
         response.sendRedirect("linguagens.jsp");
     }
 
-    private void adicionarLinguagem() throws IOException {
-        String anoLancamento, nome, licenca, descricao, caminhoLogo;
-        anoLancamento = nome = licenca = descricao = caminhoLogo = null;
+    private void adicionarOuEditarLinguagem() throws IOException {
+        String anoLancamento, nome, id, licenca, descricao, caminhoLogo;
+        anoLancamento = nome = licenca = descricao = caminhoLogo = id = "";
 
         File file;
         int maxFileSize = 5000 * 1024;
@@ -100,29 +103,41 @@ public class LinguagemController extends HttpServlet {
                     FileItem fi = (FileItem) i.next();
                     if (!fi.isFormField()) {
                         String fileName = fi.getName();
-                        if (fileName.lastIndexOf("\\") >= 0) {
-                            String name = fileName.substring(fileName.lastIndexOf("\\"), fileName.lastIndexOf("."));
-                            name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-                            file = new File(filePath + name);
-                        } else {
-                            String name = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
-                            name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-                            file = new File(filePath + name);
+                        if (fileName != null) {
+                            if (fileName.lastIndexOf("\\") >= 0) {
+                                //String name = fileName.substring(fileName.lastIndexOf("\\"), fileName.lastIndexOf("."));
+                                String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+                                file = new File(filePath + name);
+                            } else {
+                                //String name = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
+                                String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+                                file = new File(filePath + name);
+                            }
+                            caminhoLogo = file.getName();
+                            fi.write(file);
                         }
-                        caminhoLogo = file.getName();
-                        fi.write(file);
                     } else {
                         String campo = fi.getFieldName();
                         String valor = fi.getString("UTF-8");
 
-                        if (campo.equals("nome")) {
-                            nome = valor;
-                        } else if (campo.equals("ano_lancamento")) {
-                            anoLancamento = valor;
-                        } else if (campo.equals("licenca")) {
-                            licenca = valor;
-                        } else if (campo.equals("descricao")) {
-                            descricao = valor;
+                        switch (campo) {
+                            case "nome":
+                                nome = valor;
+                                break;
+                            case "ano_lancamento":
+                                anoLancamento = valor;
+                                break;
+                            case "licenca":
+                                licenca = valor;
+                                break;
+                            case "descricao":
+                                descricao = valor;
+                                break;
+                            case "id":
+                                id = valor;
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
@@ -130,10 +145,32 @@ public class LinguagemController extends HttpServlet {
                 System.out.println(ex);
             }
         }
+        boolean atualizando = !id.isEmpty();
+        
+        if (atualizando) {
+            Linguagem linguagem = dao.select(Integer.parseInt(id));
 
-        Linguagem linguagem = new Linguagem(nome, anoLancamento, licenca, descricao, caminhoLogo);
+            linguagem.setAnoLancamento(anoLancamento);
+            linguagem.setDescricao(descricao);
+            linguagem.setLicenca(licenca);
+            linguagem.setNome(nome);
 
-        dao.insert(linguagem);
+            if (!caminhoLogo.isEmpty()) {
+                File imagemAntiga = new File(filePath + linguagem.getCaminhoLogo());
+                imagemAntiga.delete();
+
+                linguagem.setCaminhoLogo(caminhoLogo);
+            }
+
+            dao.update(linguagem);
+
+        } else {
+            Linguagem linguagem = new Linguagem(nome, anoLancamento, licenca, descricao, caminhoLogo);
+
+            dao.insert(linguagem);    
+        }
+        
+               
 
         response.sendRedirect("linguagens.jsp");
     }

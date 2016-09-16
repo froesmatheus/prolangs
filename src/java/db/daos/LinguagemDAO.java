@@ -52,7 +52,7 @@ public class LinguagemDAO {
     public boolean update(Linguagem linguagem) {
         try {
             PreparedStatement smt = con.prepareStatement(""
-                    + "update noticias set nome=?, descricao=?, licenca=?, logo_caminho=?, ano_lancamento "
+                    + "update linguagens set nome=?, descricao=?, licenca=?, logo_caminho=?, ano_lancamento=? "
                     + "where id_linguagem=?");
             
             smt.setString(1, linguagem.getNome());

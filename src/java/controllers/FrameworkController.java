@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.Framework;
+import models.Linguagem;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -27,6 +28,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author matheus
  */
 public class FrameworkController extends HttpServlet {
+
     private HttpServletRequest request;
     private HttpServletResponse response;
     private final FrameworkDAO dao;
@@ -40,12 +42,12 @@ public class FrameworkController extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         this.request = request;
         this.response = response;
-        
+
         if (request.getContentType().contains("multipart/form-data")) {
-            adicionarFramework();
+            adicionarOuEditarFramework();
             return;
         }
-        
+
         if (request.getParameter("btn_editar") != null) {
             editarFramework();
             return;
@@ -56,13 +58,12 @@ public class FrameworkController extends HttpServlet {
             return;
         }
 
-    }    
-   
+    }
 
-    private void adicionarFramework() throws IOException {
-        String nome, genero, paginaOficial, descricao, caminhoLogo;
+    private void adicionarOuEditarFramework() throws IOException {
+        String nome, genero, paginaOficial, id, descricao, caminhoLogo;
         int idLinguagem = -1;
-        genero = nome = paginaOficial = descricao = caminhoLogo = null;
+        genero = nome = paginaOficial = descricao = id = caminhoLogo = "";
 
         File file;
         int maxFileSize = 5000 * 1024;
@@ -92,12 +93,12 @@ public class FrameworkController extends HttpServlet {
                     if (!fi.isFormField()) {
                         String fileName = fi.getName();
                         if (fileName.lastIndexOf("\\") >= 0) {
-                            String name = fileName.substring(fileName.lastIndexOf("\\"), fileName.lastIndexOf("."));
-                            name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+                            //String name = fileName.substring(fileName.lastIndexOf("\\"), fileName.lastIndexOf("."));
+                            String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
                             file = new File(filePath + name);
                         } else {
-                            String name = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
-                            name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+                            //String name = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
+                            String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
                             file = new File(filePath + name);
                         }
                         caminhoLogo = file.getName();
@@ -106,16 +107,27 @@ public class FrameworkController extends HttpServlet {
                         String campo = fi.getFieldName();
                         String valor = fi.getString("UTF-8");
 
-                        if (campo.equals("nome")) {
-                            nome = valor;
-                        } else if (campo.equals("genero")) {
-                            genero = valor;
-                        } else if (campo.equals("pagina_oficial")) {
-                            paginaOficial = valor;
-                        } else if (campo.equals("descricao")) {
-                            descricao = valor;
-                        } else if (campo.equals("linguagem")) {
-                            idLinguagem = Integer.parseInt(valor);
+                        switch (campo) {
+                            case "nome":
+                                nome = valor;
+                                break;
+                            case "genero":
+                                genero = valor;
+                                break;
+                            case "pagina_oficial":
+                                paginaOficial = valor;
+                                break;
+                            case "descricao":
+                                descricao = valor;
+                                break;
+                            case "linguagem":
+                                idLinguagem = Integer.parseInt(valor);
+                                break;
+                            case "id":
+                                id = valor;
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
@@ -123,11 +135,32 @@ public class FrameworkController extends HttpServlet {
                 System.out.println(ex);
             }
         }
+        boolean atualizando = !id.isEmpty();
 
-        Framework framework = new Framework(nome, descricao, genero, paginaOficial, idLinguagem, caminhoLogo);
+        if (atualizando) {
+            Framework framework = dao.select(Integer.parseInt(id));
 
-        dao.insert(framework);
+            framework.setDescricao(descricao);
+            framework.setGenero(genero);
+            framework.setIdLinguagem(idLinguagem);
+            framework.setNome(nome);
+            framework.setPaginaOficial(paginaOficial);
 
+            if (!caminhoLogo.isEmpty()) {
+                File imagemAntiga = new File(filePath + framework.getCaminhoLogo());
+                imagemAntiga.delete();
+
+                framework.setCaminhoLogo(caminhoLogo);
+            }
+
+            dao.update(framework);
+
+        } else {
+            Framework framework = new Framework(nome, descricao, genero, paginaOficial, idLinguagem, caminhoLogo);
+
+            dao.insert(framework);
+        }
+        
         response.sendRedirect("frameworks.jsp");
     }
 
@@ -137,8 +170,13 @@ public class FrameworkController extends HttpServlet {
     }
 
     private void excluirFramework() throws IOException {
-        int linguagemId = Integer.parseInt(request.getParameter("btn_excluir"));
-        dao.delete(linguagemId);
+        int frameworkId = Integer.parseInt(request.getParameter("btn_excluir"));
+        Framework framework = dao.select(frameworkId);
+        dao.delete(frameworkId);
+
+        String filePath = getServletContext().getInitParameter("file-upload");
+        File file = new File(filePath + framework.getCaminhoLogo());
+        file.delete();
         response.sendRedirect("frameworks.jsp");
     }
 }

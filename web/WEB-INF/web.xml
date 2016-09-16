@@ -12,6 +12,14 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>controllers.LoginController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UsuarioController</servlet-name>
+        <servlet-class>controllers.UsuarioController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsuarioController</servlet-name>
+        <url-pattern>/UsuarioController</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LinguagemController</servlet-name>
         <url-pattern>/LinguagemController</url-pattern>
@@ -36,7 +44,7 @@
         <description>Local para fazer upload de arquivos</description>
         <param-name>file-upload</param-name>
         <param-value>
-            /home/matheus/Documents/NetBeansProjects/Prolangs/web/images/
+            C:\Users\mathe\Documents\NetBeansProjects\prolangs\web\images\
         </param-value>
     </context-param>
 </web-app>

@@ -2,6 +2,8 @@
 <%@page import="db.daos.LinguagemDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
+<%@include file="autenticar.jspf" %>
+
 <!DOCTYPE html>
 <%
     LinguagemDAO dao = new LinguagemDAO();
@@ -33,8 +35,10 @@
         </div>
         <!-- /.row -->
 
-        <form name="form_editar" method="get" action="controllers/LinguagemController.jsp" enctype="multipart/form-data">
+        <form name="form_editar" method="post" action="LinguagemController" enctype="multipart/form-data">
             <div class="list-group">
+                <input type="hidden" name="id" value="<%=linguagem.getId()%>"/>
+                
                 <div class="list-group-item">
                     <h4 class="list-group-item-heading">Nome</h4>
                     <input name="nome" value="<%=linguagem.getNome()%>" class="form-control" required/>
@@ -59,11 +63,11 @@
 
                 <div class="list-group-item">
                     <h4 class="list-group-item-heading">Logo</h4>
-                    <input value="<%=linguagem.getCaminhoLogo()%>" type="file" accept="image/*" name="logo" />
+                    <input type="file" accept="image/*" name="logo" />
                 </div>
 
                 <div class="list-group-item">
-                    <input class="btn btn-primary" type="submit" value="Atualizar">
+                    <input class="btn btn-primary" name="editar" type="submit" value="Atualizar">
                 </div>
             </div>
         </form>

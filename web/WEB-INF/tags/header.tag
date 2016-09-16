@@ -36,6 +36,12 @@
                     <a href="frameworks.jsp">Frameworks</a>
                 </li>
 
+                <% if (autenticado) {%>
+                <li>
+                    <a href="usuarios.jsp">Usuários</a>
+                </li>                
+                <%}%>
+
                 <li>
                     <% if (autenticado) {%>
                     <a href="LoginController"><b>Logout</b></a>
@@ -45,18 +51,18 @@
                 </li>
             </ul>
 
-            <form action="listarResultado.jsp" method="get" class="navbar-form navbar-right">
-                <div class="form-group">
-                    <input type="text" name="query" class="form-control" >
-                </div>
-                <button type="submit" class="btn btn-success">Pesquisar</button>
-            </form>
+            <!--            <form action="listarResultado.jsp" method="get" class="navbar-form navbar-right">
+                            <div class="form-group">
+                                <input type="text" name="query" class="form-control" >
+                            </div>
+                            <button type="submit" class="btn btn-success">Pesquisar</button>
+                        </form>-->
 
         </div>
     </div>
 </nav>
-                
+
 <%
-    
+
 
 %>

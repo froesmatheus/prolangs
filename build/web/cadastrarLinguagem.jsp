@@ -3,13 +3,16 @@
     Created on : Aug 26, 2016, 7:01:00 PM
     Author     : mathe
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
+<%@include file="autenticar.jspf" %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Cadastrar Linguagem</title>
     </head>
     <body>
         <c:header/>
@@ -52,7 +55,7 @@
                     
                     <div class="list-group-item">
                         <h4 class="list-group-item-heading">Logo</h4>
-                        <input type="file" accept="image/*" name="logo" />
+                        <input type="file" accept="image/*" name="logo" required/>
                     </div>
 
                     <div class="list-group-item">
@@ -64,7 +67,7 @@
             <footer>
                 <div class="row">
                     <div class="col-lg-12">
-                        <p>Copyright &copy; Prolangs 2016</p>
+                        <p>Copyright &copy; Prolangs</p>
                     </div>
                 </div>
             </footer>

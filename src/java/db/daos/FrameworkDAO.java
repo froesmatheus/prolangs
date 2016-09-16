@@ -205,4 +205,32 @@ public class FrameworkDAO {
 
         return framework;
     }
+    
+    public Framework select(int id) {
+        Framework framework = null;
+
+        try {
+            PreparedStatement smt = con.prepareStatement("select * from frameworks where id_framework = ?");
+
+            smt.setInt(1, id);
+
+            ResultSet rs = smt.executeQuery();
+
+            while (rs.next()) {
+                framework = new Framework();
+
+                framework.setId(rs.getInt("id_framework"));
+                framework.setDescricao(rs.getString("descricao"));
+                framework.setNome(rs.getString("nome"));
+                framework.setGenero(rs.getString("genero"));
+                framework.setPaginaOficial(rs.getString("pagina_oficial"));
+                framework.setIdLinguagem(rs.getInt("id_linguagem"));
+                framework.setCaminhoLogo(rs.getString("caminho_logo"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FrameworkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return framework;
+    }
 }

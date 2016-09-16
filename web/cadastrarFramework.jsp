@@ -8,6 +8,7 @@
 <%@page import="db.daos.LinguagemDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
+<%@include file="autenticar.jspf" %>
 <!DOCTYPE html>
 <%
     LinguagemDAO linguagemDAO = new LinguagemDAO();
@@ -80,7 +81,7 @@
             <footer>
                 <div class="row">
                     <div class="col-lg-12">
-                        <p>Copyright &copy; Prolangs 2016</p>
+                        <p>Copyright &copy; Prolangs</p>
                     </div>
                 </div>
             </footer>
