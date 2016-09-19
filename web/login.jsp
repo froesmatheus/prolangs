@@ -4,7 +4,7 @@
     Author     : mathe
 --%>
 
-<%@page contentType="text/html" session="true" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" isErrorPage="true" session="true" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="c" %>
 
 <!DOCTYPE html>

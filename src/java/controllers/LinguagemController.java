@@ -104,15 +104,9 @@ public class LinguagemController extends HttpServlet {
                     if (!fi.isFormField()) {
                         String fileName = fi.getName();
                         if (fileName != null) {
-                            if (fileName.lastIndexOf("\\") >= 0) {
-                                //String name = fileName.substring(fileName.lastIndexOf("\\"), fileName.lastIndexOf("."));
-                                String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-                                file = new File(filePath + name);
-                            } else {
-                                //String name = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.lastIndexOf("."));
-                                String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-                                file = new File(filePath + name);
-                            }
+                            String name = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+                            file = new File(filePath + name);
+
                             caminhoLogo = file.getName();
                             fi.write(file);
                         }
