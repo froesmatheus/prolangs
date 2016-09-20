@@ -72,7 +72,7 @@ public class LinguagemController extends HttpServlet {
         response.sendRedirect("linguagens.jsp");
     }
 
-    private void adicionarOuEditarLinguagem() throws IOException {
+    private void adicionarOuEditarLinguagem() throws IOException, ServletException {
         String anoLancamento, nome, id, licenca, descricao, caminhoLogo;
         anoLancamento = nome = licenca = descricao = caminhoLogo = id = "";
 
@@ -164,8 +164,12 @@ public class LinguagemController extends HttpServlet {
             dao.insert(linguagem);    
         }
         
-               
-
+        
         response.sendRedirect("linguagens.jsp");
+//        response.getWriter().print("<script>setTimeout(function () {"
+//                    + "window.location.href='linguagens.jsp';"
+//                + "}"
+//            + ", 1500);</script>");
+       
     }
 }

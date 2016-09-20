@@ -162,6 +162,7 @@ public class FrameworkController extends HttpServlet {
         }
         
         response.sendRedirect("frameworks.jsp");
+        //response.getWriter().print("<script>window.location.href='frameworks.jsp';</script>");
     }
 
     private void editarFramework() throws IOException {

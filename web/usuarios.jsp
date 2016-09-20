@@ -34,7 +34,7 @@
                         <a href="cadastrarUsuario.jsp"><button class="btn btn-xs btn-success">Adicionar</button></a>
                         <%}%>
                     </h1>
-                    
+
                     <form method="post" action="UsuarioController">
                         <table class="table table-hover table-bordered">
                             <tr>
